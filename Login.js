@@ -3,34 +3,36 @@ import { SafeAreaView, StyleSheet, TextInput, TouchableOpacity, Text } from "rea
 
 const sendText = async (phoneNumber) =>{
   console.log('PhoneNumber: ',phoneNumber);
-  const loginReponse = await fetch('https://dev.stedi.me/twofactorlogin/'+phoneNumber,{
+  const tokenReponse = await fetch('https://dev.stedi.me/twofactorlogin/'+phoneNumber,{
     method: 'POST',
     headers: {
       'Content-Type': 'application/text'
     }
   });
-  const loginReponseText = await loginReponse.text();//converts promise into string using await
-  console.log("Login Reponse: ",loginReponseText);
+  const tokenReponseText = await tokenReponse.text();//converts promise into string using await
+  console.log("Login Reponse: ",tokenReponseText);
 
 }
 
-const getToken = async({phoneNumber,otp}) =>{
-  const loginReponse=await fetch ('https://dev.stedi.me/twofactorlogin/',{
+const getToken = async ({phoneNumber, oneTimePassword, setUserLoggedIn}) =>{
+  const tokenReponse=await fetch('https://dev.stedi.me/twofactorlogin',{
     method: 'POST',
     headers:{
       'content-type':'application/text'
     },
-    body:{
-      phoneNumber,
-      oneTimePassword
-    }
+    body:JSON.stringify({oneTimePassword, phoneNumber})
   });
-const token = await loginReponse.text();
-  console.log(token)
+
+  const reponseCode = tokenReponse.status;//200 means logged in right
+  if(reponseCode==200){
+    setUserLoggedIn(true);
+  }
+const tokenResponseString = await tokenReponse.text();
+console.log("Reponse Status Code", reponseCode)
 }
 
 
-const Login = () => {
+const Login = (props) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [oneTimePassword, setOneTimePassword] = useState(null);
 
@@ -60,7 +62,7 @@ const Login = () => {
       />
       <TouchableOpacity
       style={styles.button}
-      onPress={()=>{sendText(phoneNumber)}}
+      onPress={()=>getToken({phoneNumber, oneTimePassword, setUserLoggedIn:props.setUserLoggedIn})}
       >
         <Text>Login</Text>
       </TouchableOpacity>
