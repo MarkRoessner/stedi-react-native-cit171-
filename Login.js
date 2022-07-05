@@ -20,7 +20,7 @@ const getToken = async ({phoneNumber, oneTimePassword, setUserLoggedIn}) =>{
     headers:{
       'content-type':'application/text'
     },
-    body:JSON.stringify({oneTimePassword, phoneNumber})
+    body:JSON.stringify({phoneNumber, oneTimePassword})
   });
 
   const reponseCode = tokenReponse.status;//200 means logged in right
@@ -31,6 +31,15 @@ const tokenResponseString = await tokenReponse.text();
 console.log("Reponse Status Code", reponseCode)
 }
 
+const getEmailToken = async ({emailAddress}) =>{
+  const emailToken = await fetch('https://dev.stedi.me/validate/'+tokenReponse,{
+  method: 'GET',
+  headers:{
+    'content-type':'application/text'
+  },
+  body:JSON.stringify({emailAddress})
+});
+}
 
 const Login = (props) => {
   const [phoneNumber, setPhoneNumber] = useState("");
