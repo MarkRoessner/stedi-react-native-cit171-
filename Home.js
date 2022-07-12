@@ -7,10 +7,11 @@ import emailAddress from './Login.js';
 import Login from './Login.js';
 import setEmailAddress from './App.js';
 
-const Home = () => {
+const Home = (props) => {
+  console.log(props.loggedInUser)
   return (
     <View>
-      <Bar children={()=><Bar loggedInUser={setEmailAddress}/>}/>
+      <Bar loggedInUser = {props.loggedInUser} />
       <Icons/>
     </View>
   );

@@ -21,6 +21,7 @@ export default function App(props) {
   if (userLoggedIn){
 
   return (
+    console.log(emailAddress),
     <NavigationContainer>
       <Tab.Navigator
         initialRouteName='Home'
@@ -30,7 +31,6 @@ export default function App(props) {
         <Tab.Screen
           name='Home'
           children={()=><Home loggedInUser={emailAddress}/>}
-          //component={Home}
           options={{
             tabBarLabel: 'Home',
             tabBarIcon: ({ color }) => (
